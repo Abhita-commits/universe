@@ -4,7 +4,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #000;
     color: #fff;
-    touch-action: none; 
+    touch-action: none; /* Prevents some default mobile gestures */
 }
 
 /* ---------------------------------- */
@@ -16,8 +16,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Optional: Hide the container initially, only show overlay */
-    visibility: hidden; 
+    visibility: hidden; /* Start hidden until the scene is initialized */
 }
 
 /* ---------------------------------- */
@@ -31,7 +30,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    /* Subtle radial gradient for depth */
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); 
     z-index: -1;
 }
 
