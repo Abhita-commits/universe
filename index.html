@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D AR Solar System Explorer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container"></div>
+
+    <div id="instruction-overlay">
+        <h2>Welcome to the AR Solar System Explorer! 🪐</h2>
+        <p>This experience uses **Augmented Reality (AR)** to place a 3D model of our solar system right in your physical space using your device's camera.</p>
+
+        <h3>How It Works & Safety:</h3>
+        <ul>
+            <li>**Camera Access:** We need camera permission to enable the AR view and detect a flat surface (like a floor or table) to place the solar system.</li>
+            <li>**Data Safety:** **No camera data is recorded, saved, or transmitted.** The camera feed is only used locally on your device for the AR experience.</li>
+            <li>**Interaction:** Once started, look for a pulsating ring (**the reticle**) on a flat surface. Tap the screen to place the solar system!</li>
+            <li>**Safety:** Please ensure you are in a safe, open area while using AR. Be aware of your surroundings!</li>
+        </ul>
+
+        <button id="start-button">
+            I Understand. Request Camera Permission & Start AR
+        </button>
+    </div>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
