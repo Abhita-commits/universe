@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Load the background star texture for the desktop view only
         if (!isAR) {
-            // FIX: Use absolute path /assets/...
+            // FIX: Use absolute path /assets/... for reliable loading on GitHub Pages
             textureLoader.load(`/assets/textures/stars.jpg`, (starsTexture) => { 
                 const starGeometry = new THREE.SphereGeometry(100, 32, 32); 
                 const starMaterial = new THREE.MeshBasicMaterial({
@@ -228,16 +228,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- 8. Handle Instruction Screen Click ---
+    // --- 8. Handle Instruction Screen Click (FIXED) ---
     startButton.addEventListener('click', () => {
+        // FIX: Hide the overlay immediately on click and show the container
+        overlay.classList.add('hidden');
+        container.style.visibility = 'visible'; 
+
         if (navigator.xr && navigator.xr.isSessionSupported('immersive-ar')) {
-             // Hide instruction overlay and initialize AR
-            overlay.classList.add('hidden');
+             // For AR-enabled devices, initialize the AR environment. 
+             // The ARButton (which appears after initAR) will handle the final session start.
             initAR();
         } else {
             // Fallback to pure 3D view if AR is not supported
+            console.warn('WebXR Augmented Reality not supported. Falling back to interactive 3D view.');
             alert('WebXR Augmented Reality not supported. Falling back to interactive 3D view. Please try on an AR-enabled phone using HTTPS.');
-            overlay.classList.add('hidden');
             init3D();
         }
     });
