@@ -1,0 +1,76 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: sans-serif;
+    background-color: #000;
+    color: #fff;
+    touch-action: none; /* Prevents some default mobile gestures */
+}
+
+/* Ensure the container for the 3D scene fills the viewport */
+#container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Style the Instruction Overlay */
+#instruction-overlay {
+    position: fixed; /* Use fixed to ensure it stays on top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    z-index: 1000; /* High z-index to be on top of everything */
+}
+
+#instruction-overlay h2 {
+    color: #4CAF50; 
+}
+
+#instruction-overlay ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    max-width: 600px;
+}
+
+#instruction-overlay li {
+    margin: 10px 0;
+}
+
+#start-button {
+    padding: 15px 30px;
+    font-size: 1.1em;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 30px;
+    transition: background-color 0.3s;
+}
+
+#start-button:hover {
+    background-color: #45a049;
+}
+
+/* Class to hide the overlay after permission/start */
+.hidden {
+    display: none !important;
+}
+
+/* Style for the AR Button created by Three.js */
+#ar-button {
+    z-index: 100;
+}
