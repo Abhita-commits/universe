@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         container.appendChild(arButton);
         
-        // Create Reticle for placement
+        // Create Reticle for placement 
         const reticleGeometry = new THREE.RingGeometry(0.15, 0.2, 32).rotateX(- Math.PI / 2);
         const reticleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.6, transparent: true });
         reticle = new THREE.Mesh(reticleGeometry, reticleMaterial);
