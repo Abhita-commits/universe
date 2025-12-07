@@ -1,4 +1,4 @@
-// Import Three.js components and OrbitControls
+// Import Three.js components and OrbitControls using ES modules
 import * as THREE from 'https://unpkg.com/three@0.128.0/build/three.module.js';
 import { ARButton } from 'https://unpkg.com/three@0.128.0/examples/jsm/webxr/ARButton.js';
 import { OrbitControls } from 'https://unpkg.com/three@0.128.0/examples/jsm/controls/OrbitControls.js';
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const textureLoader = new THREE.TextureLoader();
     
     // --- 1. Solar System Configuration (Planet Scale and Speed) ---
+    // The texture files must match the names in your assets/textures folder.
     const planetConfig = [
         // Name, Radius (Scaled), Distance (Scaled), Texture File, Orbital Speed
         { name: 'Sun', radius: 0.5, distance: 0, texture: 'sun.jpg', speed: 0 },
@@ -27,22 +28,24 @@ document.addEventListener('DOMContentLoaded', () => {
         { name: 'Uranus', radius: 0.12, distance: 5.5, texture: 'uranus.jpg', speed: 0.003 },
         { name: 'Neptune', radius: 0.11, distance: 6.5, texture: 'neptune.jpg', speed: 0.002 }
     ];
-    let planets = []; 
+    let planets = []; // Array to hold the planetary pivot groups
 
     // --- 2. Build the 3D Solar System Model with Textures ---
-    function createSolarSystem() {
+    function createSolarSystem(isAR = false) {
         solarSystemGroup = new THREE.Group();
         
-        // Load the background star texture
-        textureLoader.load('./assets/textures/stars.jpg', (starsTexture) => {
-            const starGeometry = new THREE.SphereGeometry(100, 32, 32); // Huge sphere
-            const starMaterial = new THREE.MeshBasicMaterial({
-                map: starsTexture,
-                side: THREE.BackSide // Render inside the sphere
+        // Load the background star texture for the desktop view only
+        if (!isAR) {
+            textureLoader.load('./assets/textures/stars.jpg', (starsTexture) => {
+                const starGeometry = new THREE.SphereGeometry(100, 32, 32); 
+                const starMaterial = new THREE.MeshBasicMaterial({
+                    map: starsTexture,
+                    side: THREE.BackSide 
+                });
+                const starMesh = new THREE.Mesh(starGeometry, starMaterial);
+                scene.add(starMesh);
             });
-            const starMesh = new THREE.Mesh(starGeometry, starMaterial);
-            scene.add(starMesh);
-        });
+        }
 
         planetConfig.forEach(config => {
             // Load the planet texture
@@ -52,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let material;
             
             if (config.name === 'Sun') {
-                // Sun uses BasicMaterial with a yellow light source inside
+                // Sun uses BasicMaterial with texture and a light source
                 material = new THREE.MeshBasicMaterial({ map: texture });
                 
                 // Add a bright point light to simulate the sun's glow
@@ -64,8 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Planets use StandardMaterial to interact with the light source (the Sun)
                 material = new THREE.MeshStandardMaterial({
                     map: texture,
-                    metalness: 0.1, // Slight shine
-                    roughness: 0.8  // Not too glossy
+                    metalness: 0.1, 
+                    roughness: 0.8  
                 });
             }
 
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: config.name, 
                 distance: config.distance, 
                 speed: config.speed,
-                angle: Math.random() * Math.PI * 2
+                angle: Math.random() * Math.PI * 2 // Start at a random orbit position
             };
             
             if (config.name !== 'Sun') {
@@ -83,9 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 pivot.add(mesh);
                 mesh.position.x = config.distance; 
                 solarSystemGroup.add(pivot);
-                planets.push(pivot); 
+                planets.push(pivot); // Track the pivot for rotation
             } else {
-                solarSystemGroup.add(mesh); 
+                solarSystemGroup.add(mesh); // Sun is at the center
             }
         });
     }
@@ -105,37 +108,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Camera Setup
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 5, 10); // Start position looking down at the system
+        camera.position.set(0, 5, 10); 
         
-        // Add Ambient Light (to see the non-Sun side of planets slightly)
+        // Add Ambient Light
         scene.add(new THREE.AmbientLight(0x404040, 0.5));
 
         // OrbitControls for interaction (Zoom, Pan, Rotate)
         controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; // Smooth movement
+        controls.enableDamping = true; 
         controls.dampingFactor = 0.05;
         controls.screenSpacePanning = false;
         controls.minDistance = 2;
         controls.maxDistance = 30;
         
-        createSolarSystem(); // Build models and load textures
+        createSolarSystem(false); // Build models with background stars
+        scene.add(solarSystemGroup);
         
         renderer.setAnimationLoop(animate);
     }
     
     // --- 4. Animation Loop for Desktop/3D View ---
     function animate() {
-        controls.update(); // Update controls for smooth movement
+        controls.update(); 
         
         // Animate Orbits and Rotations
         planets.forEach(pivot => {
             const mesh = pivot.children[0];
             const userData = mesh.userData;
             
-            // 1. Orbit: Rotate the pivot group
+            // Orbit: Rotate the pivot group
             pivot.rotation.y += userData.speed; 
             
-            // 2. Axial Rotation: Rotate the planet itself
+            // Axial Rotation: Rotate the planet itself
             mesh.rotation.y += userData.speed * 2; 
         });
 
@@ -148,6 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (controls) controls.dispose();
         if (renderer.domElement) container.removeChild(renderer.domElement);
         renderer.setAnimationLoop(null); 
+        planets = []; // Reset planets array for new AR scene
 
         // Scene and Renderer Setup for AR
         scene = new THREE.Scene();
@@ -163,9 +168,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Camera (controlled by WebXR)
         camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 20);
 
-        // Re-add Ambient Light and Solar System Group
+        // Add Ambient Light for AR
         scene.add(new THREE.HemisphereLight(0x606060, 0x404040, 3));
-        createSolarSystem(); // Rebuilds the system into the new scene
+        createSolarSystem(true); // Build models without background stars
         
         // Add the AR Button
         const arButton = ARButton.createButton(renderer, { 
@@ -173,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         container.appendChild(arButton);
         
-        // Create Reticle for placement
+        // Create Reticle for placement 
         const reticleGeometry = new THREE.RingGeometry(0.15, 0.2, 32).rotateX(- Math.PI / 2);
         const reticleMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.6, transparent: true });
         reticle = new THREE.Mesh(reticleGeometry, reticleMaterial);
@@ -210,6 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     reticle.visible = true;
                     reticle.matrix.fromArray(pose.transform.matrix);
                     
+                    // Attach the placement listener *once* per AR session
                     session.addEventListener('select', onSelect, { once: true });
                 } else {
                     reticle.visible = false;
@@ -236,14 +242,15 @@ document.addEventListener('DOMContentLoaded', () => {
             solarSystemGroup.scale.set(0.3, 0.3, 0.3); 
             scene.add(solarSystemGroup);
             reticle.visible = false;
+            // Remove listener after placement
+            renderer.xr.getSession().removeEventListener('select', onSelect);
         }
     }
 
     // --- 8. Handle Instruction Screen Click ---
     startButton.addEventListener('click', () => {
-        // The AR Button will handle the session start, but we use this to check support
         if (navigator.xr && navigator.xr.isSessionSupported('immersive-ar')) {
-             // Start AR initialization. The user will then click the AR button in the corner.
+             // Hide instruction overlay and initialize AR
             overlay.classList.add('hidden');
             initAR();
         } else {
@@ -255,7 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 9. Initial Load (Start in 3D mode first) ---
-    // If the user is on a desktop, or if AR is unavailable, the 3D mode gives them something to interact with.
     init3D();
 
     // Handle resizing
