@@ -1,24 +1,75 @@
 body {
     margin: 0;
     overflow: hidden;
-    font-family: sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #000;
     color: #fff;
-    touch-action: none; /* Prevents some default mobile gestures */
+    touch-action: none; 
 }
 
-/* Ensure the container for the 3D scene fills the viewport */
+/* ---------------------------------- */
+/* 3D Container & Scene */
+/* ---------------------------------- */
 #container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    /* Optional: Hide the container initially, only show overlay */
+    visibility: hidden; 
 }
 
-/* Style the Instruction Overlay */
+/* ---------------------------------- */
+/* Animated Star Background (CSS only for a clean effect) */
+/* ---------------------------------- */
+
+#container:before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    z-index: -1;
+}
+
+/* Star field animation (Creates a subtle, moving parallax effect) */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        /* Small stars */
+        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+        /* Medium stars */
+        radial-gradient(3px 3px at 50px 100px, #ddd, rgba(0,0,0,0)),
+        /* Large stars */
+        radial-gradient(4px 4px at 90px 40px, #fff, rgba(0,0,0,0));
+    background-size: 200px 200px;
+    animation: move-stars 100s linear infinite;
+    opacity: 0.8;
+    z-index: -2;
+}
+
+@keyframes move-stars {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 100% 100%;
+    }
+}
+
+/* ---------------------------------- */
+/* Instruction Overlay Styling */
+/* ---------------------------------- */
 #instruction-overlay {
-    position: fixed; /* Use fixed to ensure it stays on top */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -31,11 +82,14 @@ body {
     padding: 20px;
     box-sizing: border-box;
     text-align: center;
-    z-index: 1000; /* High z-index to be on top of everything */
+    z-index: 1000;
+    transition: opacity 0.5s ease-in-out;
 }
 
 #instruction-overlay h2 {
     color: #4CAF50; 
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
 }
 
 #instruction-overlay ul {
@@ -47,27 +101,31 @@ body {
 
 #instruction-overlay li {
     margin: 10px 0;
+    border-left: 3px solid #4CAF50;
+    padding-left: 10px;
 }
 
 #start-button {
     padding: 15px 30px;
-    font-size: 1.1em;
+    font-size: 1.2em;
     cursor: pointer;
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 5px;
     margin-top: 30px;
-    transition: background-color 0.3s;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
+    transition: all 0.3s;
 }
 
 #start-button:hover {
     background-color: #45a049;
+    box-shadow: 0 0 25px rgba(76, 175, 80, 1);
 }
 
-/* Class to hide the overlay after permission/start */
 .hidden {
-    display: none !important;
+    opacity: 0;
+    pointer-events: none; /* Disable interaction when hidden */
 }
 
 /* Style for the AR Button created by Three.js */
