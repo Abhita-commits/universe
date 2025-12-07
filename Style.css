@@ -2,9 +2,9 @@ body {
     margin: 0;
     overflow: hidden;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #000;
-    color: #fff;
-    touch-action: none; /* Prevents some default mobile gestures */
+    background-color: #000; /* Deep black background */
+    color: #E0E0E0; /* Light gray text */
+    touch-action: none; 
 }
 
 /* ---------------------------------- */
@@ -16,13 +16,10 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    visibility: hidden; /* Start hidden until the scene is initialized */
+    visibility: hidden; 
 }
 
-/* ---------------------------------- */
-/* Animated Star Background (CSS only for a clean effect) */
-/* ---------------------------------- */
-
+/* Animated Star Background */
 #container:before {
     content: "";
     position: fixed;
@@ -30,12 +27,12 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Subtle radial gradient for depth */
-    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%); 
+    /* Gradient from dark black to very dark blue */
+    background: radial-gradient(ellipse at bottom, #0A141D 0%, #000000 100%); 
     z-index: -1;
 }
 
-/* Star field animation (Creates a subtle, moving parallax effect) */
+/* Subtler Star field animation for deep space */
 .stars {
     position: fixed;
     top: 0;
@@ -43,16 +40,11 @@ body {
     width: 100%;
     height: 100%;
     background-image: 
-        /* Small stars */
-        radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
-        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
-        /* Medium stars */
-        radial-gradient(3px 3px at 50px 100px, #ddd, rgba(0,0,0,0)),
-        /* Large stars */
-        radial-gradient(4px 4px at 90px 40px, #fff, rgba(0,0,0,0));
-    background-size: 200px 200px;
-    animation: move-stars 100s linear infinite;
-    opacity: 0.8;
+        radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0));
+    background-size: 150px 150px;
+    animation: move-stars 150s linear infinite; /* Slower animation */
+    opacity: 0.6;
     z-index: -2;
 }
 
@@ -66,7 +58,7 @@ body {
 }
 
 /* ---------------------------------- */
-/* Instruction Overlay Styling */
+/* Instruction Overlay Styling (Modern/Dark) */
 /* ---------------------------------- */
 #instruction-overlay {
     position: fixed;
@@ -74,7 +66,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.98); /* Almost opaque black */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -83,12 +75,12 @@ body {
     box-sizing: border-box;
     text-align: center;
     z-index: 1000;
-    transition: opacity 0.5s ease-in-out;
 }
 
 #instruction-overlay h2 {
-    color: #4CAF50; 
-    font-size: 2.5em;
+    color: #4CAF50; /* Bright accent color */
+    font-size: 3em;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5); /* Glowing text */
     margin-bottom: 0.5em;
 }
 
@@ -100,32 +92,35 @@ body {
 }
 
 #instruction-overlay li {
-    margin: 10px 0;
-    border-left: 3px solid #4CAF50;
-    padding-left: 10px;
+    margin: 15px 0;
+    border-left: 4px solid #4CAF50;
+    padding-left: 15px;
+    font-size: 1.1em;
 }
 
 #start-button {
-    padding: 15px 30px;
-    font-size: 1.2em;
+    padding: 18px 40px;
+    font-size: 1.3em;
     cursor: pointer;
     background-color: #4CAF50;
-    color: white;
+    color: #000; /* Black text on green button */
     border: none;
-    border-radius: 5px;
-    margin-top: 30px;
-    box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
+    border-radius: 8px;
+    margin-top: 40px;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.9); /* Strong glow */
     transition: all 0.3s;
+    font-weight: bold;
 }
 
 #start-button:hover {
-    background-color: #45a049;
-    box-shadow: 0 0 25px rgba(76, 175, 80, 1);
+    background-color: #76ff03; /* Lighter green on hover */
+    box-shadow: 0 0 30px rgba(118, 255, 3, 1.2); 
+    transform: scale(1.05);
 }
 
 .hidden {
     opacity: 0;
-    pointer-events: none; /* Disable interaction when hidden */
+    pointer-events: none;
 }
 
 /* Style for the AR Button created by Three.js */
